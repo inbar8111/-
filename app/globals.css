@@ -1,26 +1,49 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --mil-bg: #0a0e17;
+  --mil-surface: #131a24;
+  --mil-card: #1c2737;
+  --mil-border: #2a3f5a;
+  --mil-primary: #3d7a3d;
+  --mil-primary-hover: #4e9a4e;
+  --mil-accent: #6dbf77;
+  --mil-text: #c9d4e0;
+  --mil-muted: #5a7a90;
+  --mil-warning: #d4a017;
+  --mil-danger: #c0392b;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-mil-bg: var(--mil-bg);
+  --color-mil-surface: var(--mil-surface);
+  --color-mil-card: var(--mil-card);
+  --color-mil-border: var(--mil-border);
+  --color-mil-primary: var(--mil-primary);
+  --color-mil-primary-hover: var(--mil-primary-hover);
+  --color-mil-accent: var(--mil-accent);
+  --color-mil-text: var(--mil-text);
+  --color-mil-muted: var(--mil-muted);
+  --color-mil-warning: var(--mil-warning);
+  --color-mil-danger: var(--mil-danger);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--mil-bg);
+  color: var(--mil-text);
+  font-family: 'Heebo', Arial, sans-serif;
+  direction: rtl;
 }
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--mil-surface); }
+::-webkit-scrollbar-thumb { background: var(--mil-border); border-radius: 3px; }

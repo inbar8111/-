@@ -1,65 +1,112 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useState, useEffect, useCallback } from 'react'
+import MissionCard from '@/components/MissionCard'
+import AddMissionModal from '@/components/AddMissionModal'
+import type { Mission, MissionReset } from '@/lib/types'
+
+interface MissionSummary extends Mission {
+  assignmentCount: number
+  lastReset: MissionReset | null
+}
+
+export default function HomePage() {
+  const [missions, setMissions] = useState<MissionSummary[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showAdd, setShowAdd] = useState(false)
+
+  const loadData = useCallback(async () => {
+    try {
+      const res = await fetch('/api/missions/summary')
+      const data = await res.json()
+      if (Array.isArray(data)) setMissions(data)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => { loadData() }, [loadData])
+
+  function handleAdded(mission: Mission) {
+    setMissions(prev => [...prev, { ...mission, assignmentCount: 0, lastReset: null }])
+  }
+
+  function handleDeleted(id: string) {
+    setMissions(prev => prev.filter(m => m.id !== id))
+  }
+
+  function handleReset(id: string) {
+    setMissions(prev => prev.map(m =>
+      m.id === id
+        ? { ...m, assignmentCount: 0, lastReset: { id: '', mission_id: id, reset_at: new Date().toISOString() } }
+        : m
+    ))
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-mil-muted text-lg animate-pulse">טוען משימות...</div>
+      </div>
+    )
+  }
+
+  const fixed = missions.filter(m => m.is_fixed)
+  const custom = missions.filter(m => !m.is_fixed)
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="flex flex-col gap-6 py-4" dir="rtl">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setShowAdd(true)}
+          className="px-4 py-2 rounded border border-mil-primary text-mil-primary hover:bg-mil-primary hover:text-white transition-colors text-sm font-medium"
+        >
+          + הוסף משימה
+        </button>
+        <h1 className="text-2xl font-bold text-mil-text">בחר משימה</h1>
+      </div>
+
+      <section>
+        <h2 className="text-mil-muted text-xs font-medium mb-3 tracking-widest uppercase text-right">משימות קבועות</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {fixed.map(m => (
+            <MissionCard
+              key={m.id}
+              mission={m}
+              assignmentCount={m.assignmentCount}
+              lastReset={m.lastReset}
+              onReset={handleReset}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ))}
         </div>
-      </main>
+      </section>
+
+      {custom.length > 0 && (
+        <section>
+          <h2 className="text-mil-muted text-xs font-medium mb-3 tracking-widest uppercase text-right">משימות נוספות</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {custom.map(m => (
+              <MissionCard
+                key={m.id}
+                mission={m}
+                assignmentCount={m.assignmentCount}
+                lastReset={m.lastReset}
+                onDeleted={handleDeleted}
+                onReset={handleReset}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {showAdd && (
+        <AddMissionModal
+          onClose={() => setShowAdd(false)}
+          onAdded={handleAdded}
+        />
+      )}
     </div>
-  );
+  )
 }
