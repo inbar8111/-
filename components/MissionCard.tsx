@@ -51,12 +51,12 @@ export default function MissionCard({ mission, orderNum, assignmentCount, lastRe
   }
 
   return (
-    <div className="bg-mil-card border border-mil-border rounded-lg p-4 flex flex-col gap-3 hover:border-mil-primary/60 transition-colors">
+    <div className="bg-mil-card border border-mil-border rounded-lg p-4 flex flex-col gap-3 hover:border-mil-primary/60 transition-colors" dir="rtl">
       <div className="flex items-start justify-between gap-2">
-        <div className="flex flex-col items-end flex-1">
+        <div className="flex flex-col items-start flex-1">
           <div className="flex items-center gap-2">
-            {orderNum && <span className="text-mil-muted text-xs font-mono">{orderNum}</span>}
             <h3 className="text-mil-text font-bold text-lg leading-tight">{mission.name}</h3>
+            {orderNum && <span className="text-mil-muted text-xs font-mono">{orderNum}</span>}
           </div>
           <span className={`text-sm mt-1 ${assignmentCount > 0 ? 'text-mil-accent' : 'text-mil-muted'}`}>
             {assignmentCount > 0 ? `${assignmentCount} משובצים` : 'אין משובצים'}
