@@ -14,9 +14,10 @@ export async function POST(request: Request) {
   const res = NextResponse.json({ success: true, role })
   res.cookies.set('auth', cookieValue, {
     httpOnly: true,
+    secure: true,
     sameSite: 'lax',
     path: '/',
-    maxAge: 60 * 60 * 12, // 12 hours
+    maxAge: 60 * 60 * 24 * 30, // 30 days
   })
   return res
 }
