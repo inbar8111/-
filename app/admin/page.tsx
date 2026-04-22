@@ -38,6 +38,15 @@ export default async function AdminPage() {
     <div className="flex flex-col gap-4 py-4" dir="rtl">
       {/* Stats */}
       <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <h1 className="text-lg font-bold text-mil-text">לוח ניהול</h1>
+          <Link href="/" className="px-3 py-1.5 rounded border border-mil-primary/60 text-mil-primary hover:bg-mil-primary/10 text-sm transition-colors">
+            שיבוץ →
+          </Link>
+          <Link href="/admin/personnel" className="px-3 py-1.5 rounded border border-mil-border text-mil-muted hover:text-mil-text text-sm transition-colors">
+            כוח אדם
+          </Link>
+        </div>
         <div className="flex gap-2">
           <div className="bg-mil-card border border-mil-border rounded-lg px-3 py-2 text-center min-w-[70px]">
             <div className="text-xl font-bold text-mil-accent">{total}</div>
@@ -51,15 +60,6 @@ export default async function AdminPage() {
             <div className="text-xl font-bold text-mil-text">{(missions ?? []).length}</div>
             <div className="text-mil-muted text-xs">משימות</div>
           </div>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <Link href="/admin/personnel" className="px-3 py-1.5 rounded border border-mil-border text-mil-muted hover:text-mil-text text-sm transition-colors">
-            כוח אדם
-          </Link>
-          <Link href="/" className="px-3 py-1.5 rounded border border-mil-primary/60 text-mil-primary hover:bg-mil-primary/10 text-sm transition-colors">
-            ← שיבוץ
-          </Link>
-          <h1 className="text-lg font-bold text-mil-text">לוח ניהול</h1>
         </div>
       </div>
 

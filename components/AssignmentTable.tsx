@@ -87,7 +87,7 @@ export default function AssignmentTable({ missionId, missionName, initialAssignm
       <div className="flex items-center justify-between">
         <h2 className="text-mil-text text-lg sm:text-xl font-bold">{missionName}</h2>
         <button onClick={() => router.push('/')} className="text-mil-muted hover:text-mil-text text-sm transition-colors">
-          ← חזרה
+          חזרה →
         </button>
       </div>
 
