@@ -100,7 +100,7 @@ export default async function AdminPage() {
                       <span className="text-mil-warning text-xs font-bold">★ מפקד</span>
                       <span className="text-mil-warning font-bold text-sm">{commander.personnel.first_name} {commander.personnel.last_name}</span>
                       <span className="text-mil-muted text-xs">{commander.personnel.personal_number}</span>
-                      <span className="text-mil-muted text-xs">{commander.personnel.phone}</span>
+                      <span className="text-mil-accent text-xs">{commander.personnel.phone}</span>
                       <span className="text-mil-muted text-xs">{commander.personnel.role}</span>
                     </div>
                   )}
@@ -110,9 +110,9 @@ export default async function AdminPage() {
                       <div key={a.id} className="flex items-center gap-1.5 bg-mil-surface/40 rounded px-2 py-1 flex-wrap">
                         <span className="text-mil-muted text-xs w-4">{i + 1 + (commander ? 1 : 0)}</span>
                         <span className="text-mil-text text-sm font-medium">{a.personnel.first_name} {a.personnel.last_name}</span>
-                        <span className="text-mil-muted text-xs mr-auto">{a.personnel.personal_number}</span>
-                        <span className="text-mil-muted text-xs hidden sm:inline">{a.personnel.phone}</span>
-                        <span className="text-mil-muted text-xs">{a.personnel.role}</span>
+                        <span className="text-mil-muted text-xs">{a.personnel.personal_number}</span>
+                        <span className="text-mil-accent text-xs">{a.personnel.phone}</span>
+                        <span className="text-mil-muted text-xs mr-auto">{a.personnel.role}</span>
                       </div>
                     ))}
                   </div>

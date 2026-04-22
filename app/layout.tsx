@@ -23,24 +23,32 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="he" dir="rtl" className={heebo.className}>
       <body className="min-h-screen bg-mil-bg text-mil-text flex flex-col">
         {isLoggedIn && (
-          <header className="bg-mil-surface border-b border-mil-border px-6 py-3 flex items-center justify-between sticky top-0 z-40">
-            <div className="flex items-center gap-4">
+          <header className="bg-mil-surface border-b border-mil-border px-3 py-2 sticky top-0 z-40 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-3">
+            {/* Top row: title + role badge */}
+            <div className="flex items-center justify-between sm:order-2">
+              <Link href={role === 'admin' ? '/admin' : '/'} className="text-mil-accent font-bold text-base sm:text-lg tracking-wide">
+                ניהול שיבוץ משימות
+              </Link>
+              <span className={`text-xs px-2 py-1 rounded-full border font-medium sm:hidden ${role === 'admin' ? 'border-mil-warning/60 text-mil-warning' : 'border-mil-primary/60 text-mil-accent'}`}>
+                {role === 'admin' ? 'מנהל' : 'משתמש'}
+              </span>
+            </div>
+            {/* Bottom row: nav links */}
+            <div className="flex items-center gap-2 sm:order-1">
               {role === 'admin' && (
                 <>
-                  <Link href="/admin" className="text-mil-muted hover:text-mil-text text-sm transition-colors">
+                  <Link href="/admin" className="px-3 py-1.5 rounded border border-mil-border text-mil-muted hover:text-mil-text text-sm transition-colors">
                     לוח ניהול
                   </Link>
-                  <Link href="/admin/personnel" className="text-mil-muted hover:text-mil-text text-sm transition-colors">
+                  <Link href="/admin/personnel" className="px-3 py-1.5 rounded border border-mil-border text-mil-muted hover:text-mil-text text-sm transition-colors">
                     כוח אדם
                   </Link>
                 </>
               )}
               <LogoutButton />
             </div>
-            <Link href={role === 'admin' ? '/admin' : '/'} className="text-mil-accent font-bold text-lg tracking-wide">
-              ניהול שיבוץ משימות
-            </Link>
-            <div className="flex items-center gap-2">
+            {/* Role badge desktop only */}
+            <div className="hidden sm:flex items-center gap-2 sm:order-3">
               <span className={`text-xs px-2 py-1 rounded-full border font-medium ${role === 'admin' ? 'border-mil-warning/60 text-mil-warning' : 'border-mil-primary/60 text-mil-accent'}`}>
                 {role === 'admin' ? 'מנהל' : 'משתמש'}
               </span>
