@@ -63,19 +63,26 @@ export default async function AdminPage() {
         </div>
       </div>
 
-      {/* Missions — one per row, mobile-friendly */}
+      {/* Missions */}
       <div className="flex flex-col gap-3">
         {(missions ?? []).map((m, mIdx) => {
           const mA = byMission[m.id] ?? []
-          const commander = mA.find(a => a.is_commander)
-          const others = mA.filter(a => !a.is_commander)
           const startTime = mA[0]?.mission_start_time
           const lastReset = lastResetMap[m.id]
 
           return (
             <div key={m.id} className="bg-mil-card border border-mil-border rounded-lg overflow-hidden">
-              {/* Header */}
+              {/* Header — mission name on RIGHT, meta on LEFT */}
               <div className={`flex items-center justify-between px-3 py-2.5 border-b border-mil-border flex-wrap gap-2 ${mA.length > 0 ? 'bg-mil-primary/10' : 'bg-mil-surface'}`}>
+                {/* RIGHT: number + name + link */}
+                <div className="flex items-center gap-2">
+                  <span className="text-mil-muted text-xs font-mono">{mIdx + 1}.</span>
+                  <h3 className="text-mil-text font-bold text-sm sm:text-base">{m.name}</h3>
+                  <Link href={`/mission/${m.id}`} className="text-mil-muted hover:text-mil-accent text-xs transition-colors">
+                    שבץ
+                  </Link>
+                </div>
+                {/* LEFT: badges + dates */}
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${mA.length > 0 ? 'bg-mil-primary/30 text-mil-accent' : 'bg-mil-border/50 text-mil-muted'}`}>
                     {mA.length > 0 ? `${mA.length} חיילים` : 'ריקה'}
@@ -83,39 +90,36 @@ export default async function AdminPage() {
                   {startTime && <span className="text-mil-muted text-xs">עליה: {formatDate(startTime)}</span>}
                   {lastReset && <span className="text-mil-muted text-xs">איפוס: {formatDate(lastReset)}</span>}
                 </div>
-                <div className="flex items-center gap-2">
-                  <Link href={`/mission/${m.id}`} className="text-mil-muted hover:text-mil-accent text-xs transition-colors">
-                    שבץ
-                  </Link>
-                  <span className="text-mil-muted text-xs font-mono">{mIdx + 1}.</span>
-                  <h3 className="text-mil-text font-bold text-sm sm:text-base">{m.name}</h3>
-                </div>
               </div>
 
               {mA.length > 0 ? (
-                <div className="p-2">
-                  {/* Commander */}
-                  {commander && (
-                    <div className="flex items-center gap-2 bg-mil-warning/5 border border-mil-warning/20 rounded px-2 py-1.5 mb-1 flex-wrap">
-                      <span className="text-mil-warning text-xs font-bold">★ מפקד</span>
-                      <span className="text-mil-warning font-bold text-sm">{commander.personnel.first_name} {commander.personnel.last_name}</span>
-                      <span className="text-mil-muted text-xs">{commander.personnel.personal_number}</span>
-                      <span className="text-mil-accent text-xs">{commander.personnel.phone}</span>
-                      <span className="text-mil-muted text-xs">{commander.personnel.role}</span>
-                    </div>
-                  )}
-                  {/* Others — responsive grid on mobile */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1">
-                    {others.map((a, i) => (
-                      <div key={a.id} className="flex items-center gap-1.5 bg-mil-surface/40 rounded px-2 py-1 flex-wrap">
-                        <span className="text-mil-muted text-xs w-4">{i + 1 + (commander ? 1 : 0)}</span>
-                        <span className="text-mil-text text-sm font-medium">{a.personnel.first_name} {a.personnel.last_name}</span>
-                        <span className="text-mil-muted text-xs">{a.personnel.personal_number}</span>
-                        <span className="text-mil-accent text-xs">{a.personnel.phone}</span>
-                        <span className="text-mil-muted text-xs mr-auto">{a.personnel.role}</span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm" dir="rtl">
+                    {/* Column headers */}
+                    <thead>
+                      <tr className="border-b border-mil-border/60 bg-mil-surface/50">
+                        <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">שם מלא</th>
+                        <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">מספר אישי</th>
+                        <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">מספר פלאפון</th>
+                        <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">תפקיד</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mA.map((a) => (
+                        <tr key={a.id} className={`border-b border-mil-border/30 last:border-0 ${a.is_commander ? 'bg-mil-warning/5' : 'hover:bg-mil-surface/30'}`}>
+                          <td className="px-3 py-2 text-right">
+                            <span className={`font-medium ${a.is_commander ? 'text-mil-warning' : 'text-mil-text'}`}>
+                              {a.is_commander && <span className="text-mil-warning text-xs ml-1">★</span>}
+                              {a.personnel.first_name} {a.personnel.last_name}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.personal_number}</td>
+                          <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.phone}</td>
+                          <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.role}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               ) : (
                 <div className="text-mil-muted text-sm text-center py-3">אין משובצים</div>
