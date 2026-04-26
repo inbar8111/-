@@ -93,34 +93,53 @@ export default async function AdminPage() {
               </div>
 
               {mA.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm" dir="rtl">
-                    {/* Column headers */}
-                    <thead>
-                      <tr className="border-b border-mil-border/60 bg-mil-surface/50">
-                        <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">שם מלא</th>
-                        <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">מספר אישי</th>
-                        <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">מספר פלאפון</th>
-                        <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">תפקיד</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {mA.map((a) => (
-                        <tr key={a.id} className={`border-b border-mil-border/30 last:border-0 ${a.is_commander ? 'bg-mil-warning/5' : 'hover:bg-mil-surface/30'}`}>
-                          <td className="px-3 py-2 text-right">
-                            <span className={`font-medium ${a.is_commander ? 'text-mil-warning' : 'text-mil-text'}`}>
-                              {a.is_commander && <span className="text-mil-warning text-xs ml-1">★</span>}
-                              {a.personnel.first_name} {a.personnel.last_name}
-                            </span>
-                          </td>
-                          <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.personal_number}</td>
-                          <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.phone}</td>
-                          <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.role}</td>
+                <>
+                  {/* Mobile: card per person */}
+                  <div className="flex flex-col gap-1 p-2 sm:hidden">
+                    {mA.map((a) => (
+                      <div key={a.id} className={`rounded-lg px-3 py-2 flex flex-col gap-1 ${a.is_commander ? 'bg-mil-warning/5 border border-mil-warning/20' : 'bg-mil-surface/30'}`}>
+                        <div className="flex items-center justify-between">
+                          <span className="text-mil-muted text-xs">{a.personnel.role}</span>
+                          <span className={`font-bold text-sm ${a.is_commander ? 'text-mil-warning' : 'text-mil-text'}`}>
+                            {a.is_commander && '★ '}{a.personnel.first_name} {a.personnel.last_name}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-mil-muted">
+                          <span dir="ltr">{a.personnel.phone}</span>
+                          <span dir="ltr">{a.personnel.personal_number}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Desktop: table */}
+                  <div className="hidden sm:block overflow-x-auto">
+                    <table className="w-full text-sm" dir="rtl">
+                      <thead>
+                        <tr className="border-b border-mil-border/60 bg-mil-surface/50">
+                          <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">שם מלא</th>
+                          <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">מספר אישי</th>
+                          <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">מספר פלאפון</th>
+                          <th className="text-right text-mil-muted text-xs font-medium px-3 py-1.5">תפקיד</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody>
+                        {mA.map((a) => (
+                          <tr key={a.id} className={`border-b border-mil-border/30 last:border-0 ${a.is_commander ? 'bg-mil-warning/5' : 'hover:bg-mil-surface/30'}`}>
+                            <td className="px-3 py-2 text-right">
+                              <span className={`font-medium ${a.is_commander ? 'text-mil-warning' : 'text-mil-text'}`}>
+                                {a.is_commander && <span className="text-mil-warning text-xs ml-1">★</span>}
+                                {a.personnel.first_name} {a.personnel.last_name}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.personal_number}</td>
+                            <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.phone}</td>
+                            <td className="px-3 py-2 text-right text-mil-muted">{a.personnel.role}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
               ) : (
                 <div className="text-mil-muted text-sm text-center py-3">אין משובצים</div>
               )}

@@ -127,8 +127,8 @@ export default function AssignmentTable({ missionId, missionName, initialAssignm
       </div>
 
       <div className="bg-mil-card border border-mil-border rounded-lg p-4 flex flex-col gap-3">
-        <div className="flex items-start gap-3 flex-wrap">
-          <label className="text-mil-text text-sm font-medium whitespace-nowrap pt-5">שעת עליה:</label>
+        <div className="flex flex-col gap-1">
+          <label className="text-mil-text text-sm font-medium">שעת עליה</label>
           <DateTimeInput value={startTime} onChange={setStartTime} />
         </div>
 

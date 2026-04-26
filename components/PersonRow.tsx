@@ -114,7 +114,7 @@ export default function PersonRow({ row, rowIndex, onChange, onDelete }: Props) 
           </div>
         </div>
         <div className="grid grid-cols-2 gap-1.5">
-          {searchFields.map(({ key, placeholder }) => (
+          {searchFields.map(({ key, placeholder }, idx) => (
             <div key={key} className="relative">
               <input
                 type="text"
@@ -125,7 +125,7 @@ export default function PersonRow({ row, rowIndex, onChange, onDelete }: Props) 
                 dir="rtl"
               />
               {activeField === key && suggestions.length > 0 && (
-                <div className={`absolute ${dropClass} right-0 z-50 bg-[#1e2a1e] border-2 border-mil-primary/60 rounded-lg shadow-2xl min-w-[240px] max-h-52 overflow-y-auto`}>
+                <div className={`absolute ${dropClass} ${idx % 2 === 1 ? 'left-0' : 'right-0'} z-50 bg-[#1e2a1e] border-2 border-mil-primary/60 rounded-lg shadow-2xl min-w-[240px] max-h-52 overflow-y-auto`}>
                   {suggestions.map(p => (
                     <button key={p.id} type="button" onMouseDown={() => fillFromPersonnel(p)}
                       className="w-full text-right px-3 py-2.5 text-sm text-white hover:bg-mil-primary/30 border-b border-white/10 last:border-0 transition-colors">
